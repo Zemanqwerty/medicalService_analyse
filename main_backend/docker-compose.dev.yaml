@@ -1,0 +1,48 @@
+version: '3.1'
+
+services:
+
+  # flask_web:
+  #   container_name: flask_web_container
+  #   build: .
+  #   ports:
+  #     - 5001:5001
+  #   environment:
+  #     DATABASE_URI: postgresql://root:root@db:5432/medicalService-analyse
+  #   restart: unless-stopped
+
+  db:
+    image:  postgres:11
+    ports:
+      - 5433:5432
+    volumes:
+      - data:/var/lib/postgresql/data
+    command: postgres -c stats_temp_directory=/tmp
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: medicalService-analyse
+    healthcheck:
+      test: "pg_isready -h db"
+      interval: 3s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  data:
