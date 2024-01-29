@@ -43,7 +43,7 @@ const LKPage: FC = () => {
                 <button onClick={getAnalyseData} className={styles.send_btn}>Получить результаты</button>
 
                 {analyses.map(analyse => 
-                    <AnalyseResults anayse={analyse} />
+                    <AnalyseResults analyse={analyse} />
                 )}
                 </div>
             </>

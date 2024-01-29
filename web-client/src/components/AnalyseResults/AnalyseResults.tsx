@@ -7,7 +7,7 @@ import AnalyseData from "../AnalyseData";
 import showArrow from '../../sources/images/Arrow.png';
 
 interface PromptTypes {
-    anayse: {info_1: string, info_2: string, filename: string}
+    analyse: {info_1: string, info_2: string, reference_results: string[], filename: string}
 }
 
 const AnalyseResult: FC<PromptTypes> = (props) => {
@@ -26,14 +26,14 @@ const AnalyseResult: FC<PromptTypes> = (props) => {
         <>
             <div className={styles.blockWrapper}>
                 <div className={styles.btnWrapperBlock} onClick={showData}>
-                    <p>{props.anayse.filename}</p>
+                    <p>{props.analyse.filename}</p>
                     <img src={showArrow} alt="" style={{
                         transform: showResultData ? 'rotate(180deg)' : '',
                     }}/>
                 </div>
                 {showResultData === false ?
                 null :
-                <AnalyseData anayse={props.anayse}/>}
+                <AnalyseData analyse={props.analyse}/>}
             </div>
         </>
     )
