@@ -1,3 +1,4 @@
+import re
 from flask import jsonify, session
 from app import ALLOWED_EXTENSIONS, UPLOAD_FOLDER, logger
 import os
@@ -6,9 +7,10 @@ from werkzeug.utils import secure_filename
 import io
 from array import array
 from app import logger
-from . import users_services, analyse_services
+from . import users_services, analyse_services, reference_result_service
 import pandas as pd
 import PyPDF2
+from fuzzywuzzy import fuzz
 from app import BASEDIR
 
 
@@ -19,29 +21,48 @@ def upload_file(files, message_data):
 
         CSV_FOLDER = os.path.join(BASEDIR, 'CSV/TEST.csv')
         df = pd.read_csv(CSV_FOLDER)
-        print(files['file_1'])
-        print(f'file_{str(0+1)}')
 
         for file_index in range(len(files)):
-            print(file_index)
             file = files[f'file_{str(file_index+1)}']
-            print(file)
             if file.filename.endswith('.pdf'):
                 content = ''
             
                 pdf_reader = PyPDF2.PdfReader(file)
                 text = ""
+                text2 = ""
                 for page in pdf_reader.pages:
                     text += page.extract_text() + "\n"
-                    
+                    text2 += page.extract_text() + "|"
+                
+                pattern = r"(.*)\s(\d+.?\d+)\*"
+                matches = re.findall(pattern, text)
+                df1 = pd.DataFrame(matches, columns = ['Показатель', 'Значение'])
+
+                CSV2_FOLDER = os.path.join(BASEDIR, 'CSV/TEST2.csv')
+                df2 = pd.read_csv(CSV2_FOLDER)
+
+                token = 90
+
                 if text != "":
                     for i in range(len(df)):
                         a_name = df.iloc[i, 2]
                         if a_name in text:
                             content = df.iloc[i, 1]
 
-                    user = users_services.create_user(message_data)
-                    analyse = analyse_services.create_analyse_data(message_data=message_data, result_id=content, filename=file.filename)
+                    users_services.create_user(message_data)
+                    analyse_id = analyse_services.create_analyse_data(message_data=message_data, result_id=content, filename=file.filename)
+
+                    res = ''
+
+                    for i, row in df1.iterrows():
+                        value_a = row['Показатель']
+                        for j, row2 in df2.iterrows():
+                            value_b = row2['Название']
+                            if token > fuzz.token_sort_ratio(value_a, value_b):
+                                token = fuzz.token_sort_ratio(value_a, value_b)
+                                res = row2['Что означают результаты']
+                               
+                    reference_result_service.create_reference_result_data(analyse_id=analyse_id, result=res)
                     print(content)
                     if (content == ''):
                         return jsonify({'message': f'Анализ {file.filename} отсутствует в базе данных сервиса'}), 200

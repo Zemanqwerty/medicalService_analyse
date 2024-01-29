@@ -13,5 +13,4 @@ from ..serivces.Auth_service import authenticate
 @app.route('/lk', methods=['GET'])
 @authenticate()
 def get_analyse(user_data):
-    print(user_data)
     return jsonify(analyse_services.get_analyse_data(user_id=user_data['public_id']))

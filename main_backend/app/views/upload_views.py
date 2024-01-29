@@ -12,18 +12,8 @@ from ..serivces.Auth_service import authenticate
 @app.route('/upload', methods=['POST'])
 @validate()
 def create_message():
-    print('---')
-    print(request.files)
-    print('---')
-    print(request.files['file_1'])
-    print('---')
     if 'file_1' not in request.files:
-        print('full empty')
         return jsonify({'message': 'file is not selected'}), 401
-    
-    
-
-
     
     message_data = {
         "first_name": request.form.get('first_name'),

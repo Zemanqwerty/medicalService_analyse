@@ -11,7 +11,6 @@ def login(user_data):
     check_user = users_services.get_user_by_fio(first_name=user_data.first_name,
                                                 last_name=user_data.last_name,
                                                 report=user_data.report)
-    print(check_user)
 
     if not check_user:
         return {
@@ -65,7 +64,6 @@ def validate_access_token(access_token):
         user_data = jwt.decode(access_token, app.config['SECRET_KEY'], algorithms=["HS256"])
         return user_data
     except Exception as e:
-        print(e)
         return None
     
 

@@ -30,5 +30,5 @@ ALLOWED_EXTENSIONS = {'pdf'}
 
 
 # подключение всех функционирующих файлов (необходимо определить для конкретной работы приложения)
-from app.models import User, Token, AnalyseData, Data
+from app.models import User, Token, AnalyseData, Data, ReferenceResultData
 from app.views import upload_views, Auth_controller, lk_views
