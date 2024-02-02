@@ -27,6 +27,7 @@ def get_analyse_data(user_id):
                 'info_1': res.What_do_the_results_mean,
                 'info_2': res.General_information_about_the_study,
                 'filename': analyse.file_title,
+                'main_frame': analyse.main_dataframe,
                 'reference_results': list(map(str, reference_results))
             }
             result_list.append(data)
@@ -36,14 +37,15 @@ def get_analyse_data(user_id):
 
 
 
-def create_analyse_data(message_data, result_id, filename):
+def create_analyse_data(message_data, result_id, filename, main_dataframe):
     user_id = users_services.get_user_by_fio(first_name=message_data["first_name"],
                                              last_name=message_data["last_name"],
                                              report=message_data["report"])
     
     analyse_data = AnalyseData(user=user_id.id,
                                analyse_id=result_id,
-                               file_title=filename)
+                               file_title=filename,
+                               main_dataframe=main_dataframe)
     
     db.session.add(analyse_data)
     db.session.commit()

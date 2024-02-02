@@ -25,6 +25,11 @@ class AnalyseData(db.Model):
     analyse_id = db.Column(
         db.String
     )
+    main_dataframe = db.Column(
+        db.String,
+        default=None,
+        nullable=True
+    )
     file_title = db.Column(
         db.String,
         default='Файл без имени'

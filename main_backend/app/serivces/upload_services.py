@@ -37,6 +37,11 @@ def upload_file(files, message_data):
                 pattern = r"(.*)\s(\d+.?\d+)\*"
                 matches = re.findall(pattern, text)
                 df1 = pd.DataFrame(matches, columns = ['Показатель', 'Значение'])
+                if df1.empty:
+                    print('-1111')
+                
+                if df1.empty == True:
+                    print('+111')
 
                 CSV2_FOLDER = os.path.join(BASEDIR, 'CSV/TEST2.csv')
                 df2 = pd.read_csv(CSV2_FOLDER)
@@ -50,7 +55,13 @@ def upload_file(files, message_data):
                             content = df.iloc[i, 1]
 
                     users_services.create_user(message_data)
-                    analyse_id = analyse_services.create_analyse_data(message_data=message_data, result_id=content, filename=file.filename)
+
+                    df_for_save = df1
+
+                    if df_for_save.empty:
+                        print('111')
+                        df_for_save = 'Нет отрицательных результатов'
+                    analyse_id = analyse_services.create_analyse_data(message_data=message_data, result_id=content, filename=file.filename, main_dataframe=str(df_for_save))
 
                     res = ''
 
