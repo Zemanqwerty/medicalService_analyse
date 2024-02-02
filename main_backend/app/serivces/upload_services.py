@@ -41,7 +41,7 @@ def upload_file(files, message_data):
                 CSV2_FOLDER = os.path.join(BASEDIR, 'CSV/TEST2.csv')
                 df2 = pd.read_csv(CSV2_FOLDER)
 
-                token = 90
+                token = 70
 
                 if text != "":
                     for i in range(len(df)):
@@ -58,7 +58,7 @@ def upload_file(files, message_data):
                         value_a = row['Показатель']
                         for j, row2 in df2.iterrows():
                             value_b = row2['Название']
-                            if token > fuzz.token_sort_ratio(value_a, value_b):
+                            if token <= fuzz.token_sort_ratio(value_a, value_b):
                                 token = fuzz.token_sort_ratio(value_a, value_b)
                                 res = row2['Что означают результаты']
                                

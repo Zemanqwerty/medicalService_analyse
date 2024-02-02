@@ -64,6 +64,7 @@ def validate_access_token(access_token):
         user_data = jwt.decode(access_token, app.config['SECRET_KEY'], algorithms=["HS256"])
         return user_data
     except Exception as e:
+        print(e)
         return None
     
 
