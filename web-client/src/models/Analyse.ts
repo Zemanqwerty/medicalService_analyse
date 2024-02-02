@@ -3,4 +3,5 @@ export interface Analyse {
     info_2: string;
     filename: string;
     reference_results: string[];
+    main_frame: string;
 }

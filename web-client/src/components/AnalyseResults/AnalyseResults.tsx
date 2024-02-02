@@ -7,7 +7,7 @@ import AnalyseData from "../AnalyseData";
 import showArrow from '../../sources/images/Arrow.png';
 
 interface PromptTypes {
-    analyse: {info_1: string, info_2: string, reference_results: string[], filename: string}
+    analyse: {info_1: string, info_2: string, reference_results: string[], filename: string, main_frame: string}
 }
 
 const AnalyseResult: FC<PromptTypes> = (props) => {
