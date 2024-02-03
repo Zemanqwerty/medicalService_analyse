@@ -10,13 +10,17 @@ interface PromptTypes {
 
 const AnalyseData: FC<PromptTypes> = (props) => {
 
+    if (props.analyse.info_1 === props.analyse.reference_results[0] || props.analyse.info_2 === props.analyse.reference_results[0]) {
+        props.analyse.reference_results[0] = '';
+    }
+
     return (
         <>
                 <div dangerouslySetInnerHTML={{__html: props.analyse.info_1}}></div>
                 <div dangerouslySetInnerHTML={{__html: props.analyse.info_2}}></div>
                 <hr />
                 <div dangerouslySetInnerHTML={{__html: props.analyse.main_frame}}></div>
-                <hr />
+                {props.analyse.reference_results[0] !== '' ? <hr /> : ''}
                 {props.analyse.reference_results.map(analyse => 
                     <div dangerouslySetInnerHTML={{__html: analyse}} className={styles.resAnalyse}></div>
                 )}
