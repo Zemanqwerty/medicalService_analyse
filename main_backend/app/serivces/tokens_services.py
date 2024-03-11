@@ -22,3 +22,8 @@ def save_token(new_refresh_token, user_id):
 
 def get_tokens_by_token(refresh_token):
     return db.session.query(Tokens).filter(Tokens.refresh_token==refresh_token).first()
+
+def remove_token_from_db(refresh_token: str):
+    token = get_tokens_by_token(refresh_token=refresh_token)
+    db.session.delete(token)
+    return db.session.commit()

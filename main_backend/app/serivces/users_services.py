@@ -37,3 +37,8 @@ def get_user_by_fio(first_name, last_name, report):
         return user
     except Exception as e:
         return e
+    
+def get_user_by_id(id: int):
+    return db.session.query(Users).filter(
+        Users.id==id
+    ).first()

@@ -16,6 +16,9 @@ class Config(object):
     # SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://Sergey:1234@195.140.147.111:5432/med'
     SESSION_TYPE = 'filesystem'
     SECRET_KEY = 'somesecretkey-jwt'
+    AI_API_RQUID = config('AI_API_RQUID', cast=str, default='')
+    AI_API_AUTHORIZATION = config('AI_API_AUTHORIZATION', cast=str, default='')
+
 
 
 class ProductionConfig(Config):

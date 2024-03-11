@@ -20,8 +20,6 @@ def get_analyse_data(user_id):
             ReferenceResultData.analyse_data==analyse.id
         ).all()
 
-        print(reference_results)
-
         for res in result:
             data = {
                 'info_1': res.What_do_the_results_mean,

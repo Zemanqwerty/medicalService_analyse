@@ -18,7 +18,7 @@ def login(user_data):
         }
 
     if check_user.password != user_data.password:
-        logger.info(f'USER - {check_user.email} HAS ENTERED INCORRECT PASSWORD')
+        logger.info(f'USER - {check_user.first_name} {check_user.last_name} HAS ENTERED INCORRECT PASSWORD')
         return {
             'res': 'incorrect password'
         }
@@ -31,7 +31,7 @@ def login(user_data):
     
     refresh_token = jwt.encode({
                 'public_id': check_user.id,
-                'public_email': check_user.last_name,
+                'public_lastname': check_user.last_name,
                 'exp' : datetime.datetime.utcnow() + datetime.timedelta(days = 30)
             }, app.config['SECRET_KEY'])
     
@@ -45,13 +45,15 @@ def login(user_data):
         tokens_services.save_token(new_refresh_token=refresh_token,
                               user_id=check_user.id)
 
-    logger.info(f'USER - {check_user.last_name} HAS LOGGED IN')
+    logger.info(f'USER - {check_user.first_name} {check_user.last_name} HAS LOGGED IN')
 
     res = {
         'access_token': access_token,
         'refresh_token': refresh_token,
         'user': {
-            'last_name': check_user.last_name,
+            'firstname': check_user.first_name,
+            'lastname': check_user.last_name,
+            'report': check_user.report,
             'user_id': check_user.id
         }
     }
@@ -79,45 +81,49 @@ def validate_refresh_token(refresh_token):
 def refresh(refresh_token):
     try:
         if not refresh_token or refresh_token is None:
-            return {
-                'res': 'incorrect token'
-            }
+            return jsonify({'message': 'Unauthorized'}), 401
     
-        user_data = validate_refresh_token(refresh_token=refresh_token)
+        payload_user_data = validate_refresh_token(refresh_token=refresh_token)
 
         token_in_db = tokens_services.get_tokens_by_token(refresh_token=refresh_token)
 
-        if user_data is None or not token_in_db:
-            return {
-                'res': 'incorrect token'
-            }
+        if payload_user_data is None or not token_in_db:
+            return jsonify({'message': 'Unauthorized'}), 401
+        
+        check_user = users_services.get_user_by_id(payload_user_data['public_id'])
         
         new_access_token = jwt.encode({
-                    'public_id': user_data['public_id'],
-                    'public_lastname': user_data['public_lastname'],
+                    'public_id': payload_user_data['public_id'],
+                    'public_lastname': payload_user_data['public_lastname'],
                     'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes = 30)
                 }, app.config['SECRET_KEY'])
         
         new_refresh_token = jwt.encode({
-                    'public_id': user_data['public_id'],
-                    'public_lastname': user_data['public_lastname'],
+                    'public_id': payload_user_data['public_id'],
+                    'public_lastname': payload_user_data['public_lastname'],
                     'exp' : datetime.datetime.utcnow() + datetime.timedelta(days = 30)
                 }, app.config['SECRET_KEY'])
         
 
-        tokens = tokens_services.get_tokens_by_user_id(user_id=user_data['public_id'])
+        tokens = tokens_services.get_tokens_by_user_id(user_id=payload_user_data['public_id'])
 
         if tokens:
             tokens_services.update_token(new_refresh_token=new_refresh_token,
-                                    user_id=user_data['public_id'])
+                                    user_id=payload_user_data['public_id'])
         else:
             tokens_services.save_token(new_refresh_token=new_refresh_token,
-                                user_id=user_data['public_id'])
+                                user_id=payload_user_data['public_id'])
 
         
         new_tokens = {
             'access_token': new_access_token,
             'refresh_token': new_refresh_token,
+            'user': {
+                'firstname': check_user.first_name,
+                'lastname': check_user.last_name,
+                'report': check_user.report,
+                'user_id': check_user.id
+            }
         }
 
         return new_tokens
@@ -126,6 +132,12 @@ def refresh(refresh_token):
          return {
                 'res': 'oops error'
             }
+
+def logout(refresh_token):
+    try:
+        return tokens_services.remove_token_from_db(refresh_token=refresh_token)
+    except Exception as e:
+        print(e)
 
 
 def authenticate():
