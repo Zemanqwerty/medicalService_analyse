@@ -5,11 +5,12 @@
   }
   
   #root {
-    background-color: rgb(36, 42, 49);
+    background-color: rgb(247, 249, 250);
+    padding: 0 0 30px 0;
   }
   
   html {
-    background-color: rgb(36, 42, 49);
-    color: rgb(204, 204, 204);
+    background-color: rgb(247, 249, 250);
+    color: rgb(66, 66, 66);
     font-family: Arial, Helvetica, sans-serif;
   }

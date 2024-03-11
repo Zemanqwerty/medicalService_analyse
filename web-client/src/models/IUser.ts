@@ -1,4 +1,6 @@
 export interface IUser {
-    last_name: string;
-    user_id: number;
+    'firstname': string,
+    'lastname': string,
+    'report': string,
+    'user_id': string
 }

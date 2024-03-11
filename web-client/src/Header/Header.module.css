@@ -1,16 +1,38 @@
-.ul_wrapper {
+.headerWrapper {
     width: 100%;
-    height: 100px;
     display: flex;
+    height: 100px;
     align-items: center;
     justify-content: center;
+}
+
+.header {
+    width: 1400px;
+    padding: 10px 30px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ul_wrapper {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: flex-start;
     grid-gap: 30px;
     list-style: none;
 }
 
 .li_default {
-    font-size: 14px;
-    color: rgb(224, 224, 224);
+    transition: .3s;
+    font-size: 16px;
+    color: rgb(104, 104, 104);
     cursor: pointer;
     text-decoration: none;
+}
+
+.li_default:hover {
+    transition: .3s;
+    color: rgb(9, 148, 25);
 }

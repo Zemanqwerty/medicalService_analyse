@@ -3,8 +3,10 @@ import { Context } from '.';
 import { observer } from 'mobx-react-lite';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainPage from './pages/mainPage/MainPage';
-import LoginPage from './pages/LKPage';
+import LKPage from './pages/LKPage';
 import Header from './Header/Header';
+import LoginPage from './pages/LoginPage';
+import LoadingSpiner from './components/LoadingSpiner';
 
 
 const App: FC = () => {
@@ -20,7 +22,7 @@ const App: FC = () => {
   if (store.isLoading) {
     return (
       <>
-      LOADING...
+        <LoadingSpiner />
       </>
     )
   }
@@ -34,6 +36,7 @@ const App: FC = () => {
         <Route path="/">
           <Route index element={<MainPage />} />
           <Route path="/login" element ={<LoginPage />} />
+          <Route path="/lk" element ={<LKPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

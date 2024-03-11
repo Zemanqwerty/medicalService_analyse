@@ -11,7 +11,7 @@ export default class AuthService {
     //     return $api.post<AuthResponse>('auth/sign-up', {username, password});
     // }
 
-    // static async logout(): Promise<void> {
-    //     return $api.get('/auth/logout');
-    // }
+    static async logout(): Promise<void> {
+        return $api.get('/auth/logout');
+    }
 }

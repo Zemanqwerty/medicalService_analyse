@@ -45,27 +45,16 @@ export default class Store {
         }
     }
 
-    // async registration(username: string, password: string) {
-    //     try {
-    //         const response = await AuthService.registration(username, password);
-    //         localStorage.setItem('token', response.data.accessToken);
-    //         this.setAuth(true);
-    //         this.setUser(response.data.user);
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // }
-
-    // async logout() {
-    //     try {
-    //         await AuthService.logout();
-    //         localStorage.removeItem('token');
-    //         this.setAuth(false);
-    //         this.setUser({} as IUser);
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // }
+    async logout() {
+        try {
+            await AuthService.logout();
+            localStorage.removeItem('token');
+            this.setAuth(false);
+            this.setUser({} as IUser);
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     async checkAuth() {
         this.setLoading(true);
@@ -76,6 +65,9 @@ export default class Store {
             this.setAuth(true);
             this.setUser(response.data.user);
         } catch (e) {
+            localStorage.removeItem('token')
+            this.setAuth(false);
+            this.setUser({} as IUser)
             console.log(e);
         } finally {
             this.setLoading(false);

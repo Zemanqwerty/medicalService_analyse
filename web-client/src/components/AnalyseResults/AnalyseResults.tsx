@@ -23,11 +23,11 @@ const AnalyseResult: FC<PromptTypes> = (props) => {
     }
 
     return (
-        <>
+        <div className={styles.contentWrapper}>
             <div className={styles.blockWrapper}>
                 <div className={styles.btnWrapperBlock} onClick={showData}>
                     <p>{props.analyse.filename}</p>
-                    <img src={showArrow} alt="" style={{
+                    <img src={showArrow} alt="" className={styles.showInfoArrow} style={{
                         transform: showResultData ? 'rotate(180deg)' : '',
                     }}/>
                 </div>
@@ -35,7 +35,7 @@ const AnalyseResult: FC<PromptTypes> = (props) => {
                 null :
                 <AnalyseData analyse={props.analyse}/>}
             </div>
-        </>
+        </div>
     )
 }
 
